@@ -199,7 +199,7 @@ export default function AddProfile() {
               onChange={handleChange}
               className="bg-transparent text-sm text-[#ededed] focus:outline-none w-1/2 appearance-none"
               style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ededed'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                backgroundImage: `url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ededed'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E&quot;)`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "right 0.5rem center",
                 backgroundSize: "1.5em 1.5em",
@@ -213,8 +213,8 @@ export default function AddProfile() {
                 const feet = Math.floor((i + 48) / 12);
                 const inches = (i + 48) % 12;
                 return (
-                  <option key={i} value={`${feet}'${inches}"`}>
-                    {feet}'{inches}"
+                  <option key={i} value={`${feet}&apos;${inches}&quot;`}>
+                    {feet}&apos;{inches}&quot;
                   </option>
                 );
               })}
