@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useColor } from "../utils/ColorContext";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -50,20 +50,23 @@ export default function AddProfile() {
     );
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft") {
-      handlePrev();
-    } else if (event.key === "ArrowRight") {
-      handleNext();
-    }
-  };
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        handlePrev();
+      } else if (event.key === "ArrowRight") {
+        handleNext();
+      }
+    },
+    [images],
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [images]);
+  }, [handleKeyDown]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -147,9 +150,22 @@ export default function AddProfile() {
               </>
             )}
           </div>
-          <button className="bg-[#ededed] text-[#333] font-bold py-2 px-4 rounded-lg text-sm hover:bg-[#d4d4d4] transition-colors w-full max-w-[300px]">
+          <label className="bg-[#ededed] text-[#333] font-bold py-2 px-4 rounded-lg text-sm hover:bg-[#d4d4d4] transition-colors w-full max-w-[300px] text-center cursor-pointer">
             Upload Image
-          </button>
+            <input
+              type="file"
+              multiple
+              onChange={(e) => {
+                const files = Array.from(e.target.files || []);
+                if (files.length + images.length <= 6) {
+                  setImages((prevImages) => [...prevImages, ...files]);
+                } else {
+                  toast.error("You can only add up to 6 images.");
+                }
+              }}
+              className="hidden"
+            />
+          </label>
           <p className="text-xs text-gray-400 italic">
             Add a minimum of 2 images and a maximum of 6 images.
           </p>
@@ -181,7 +197,7 @@ export default function AddProfile() {
               name="height"
               value={formData.height}
               onChange={handleChange}
-              className="bg-transparent text-sm text-[#ededed] focus:outline-none w-1/2 appearance-none text-gray-400"
+              className="bg-transparent text-sm text-[#ededed] focus:outline-none w-1/2 appearance-none"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ededed'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                 backgroundRepeat: "no-repeat",
@@ -190,7 +206,7 @@ export default function AddProfile() {
                 paddingRight: "2rem",
               }}
             >
-              <option value="" disabled selected hidden>
+              <option value="" disabled hidden>
                 Select height
               </option>
               {Array.from({ length: 61 }, (_, i) => {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useColor } from "../utils/ColorContext";
 
@@ -18,20 +18,23 @@ export default function ProfileCard({
     onRate(profile.id, selectedRating);
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    const { key } = event;
-    if (key >= "0" && key <= "7") {
-      const selectedRating = parseInt(key);
-      handleRating(selectedRating);
-    }
-  };
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      const { key } = event;
+      if (key >= "0" && key <= "7") {
+        const selectedRating = parseInt(key);
+        handleRating(selectedRating);
+      }
+    },
+    [onRate, profile.id],
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [handleKeyDown]);
 
   return (
     <div
