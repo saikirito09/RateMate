@@ -1,26 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useColor } from "../utils/ColorContext";
-
-const profiles = [
-  // Sample data
-  { name: "John Doe", score: 98 },
-  { name: "Jane Smith", score: 96 },
-  { name: "Chris Johnson", score: 95 },
-  { name: "Kathy Brown", score: 93 },
-  { name: "Robert Wilson", score: 92 },
-  { name: "Chris Johnson", score: 95 },
-  { name: "Kathy Brown", score: 93 },
-  { name: "Robert Wilson", score: 92 },
-  { name: "Chris Johnson", score: 95 },
-  { name: "Kathy Brown", score: 93 },
-  { name: "Robert Wilson", score: 92 },
-];
+import { fetchTopProfiles } from "../utils/fetchProfile";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Analysis() {
   const randomColor: string = useColor();
+  const [profiles, setProfiles] = useState<any[]>([]);
   const [topCount, setTopCount] = useState(20);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getProfiles = async () => {
+      setLoading(true);
+      const data = await fetchTopProfiles(topCount);
+      setProfiles(data);
+      setLoading(false);
+    };
+    getProfiles();
+  }, [topCount]);
 
   const handleTopCountChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -55,18 +54,24 @@ export default function Analysis() {
             <option value="100">Top 100</option>
           </select>
         </div>
-        <ul className="text-[#ededed] space-y-2">
-          {profiles.slice(0, topCount).map((profile, index) => (
-            <li key={index} className="bg-white/10 p-2 rounded-lg">
-              <div className="flex justify-between">
-                <span>
-                  {index + 1}. {profile.name}
-                </span>
-                <span>{profile.score}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <ul className="text-[#ededed] space-y-2">
+            {profiles.map((profile, index) => (
+              <li key={profile.id} className="bg-white/10 p-2 rounded-lg">
+                <div className="flex justify-between">
+                  <span>
+                    {index + 1}. {profile.name}
+                  </span>
+                  <span>
+                    {profile.score} ({profile.numRatings} ratings)
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

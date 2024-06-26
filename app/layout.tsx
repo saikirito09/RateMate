@@ -1,9 +1,8 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
-import { ColorProvider } from "./utils/ColorContext"; // Correct import path
+import { ColorProvider } from "./utils/ColorContext";
 
 const inter = Inter({ subsets: ["latin"] });
 

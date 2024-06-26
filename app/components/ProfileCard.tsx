@@ -62,14 +62,16 @@ export default function ProfileCard({
       {/* Main profile container */}
       <div className="relative z-10 max-w-3xl w-full mx-auto mt-4">
         <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-lg overflow-hidden flex h-[500px] border border-white/20">
-          <div className="w-1/2 p-2 h-full">
-            <Image
-              src={profile.images?.[0] || "/add-your-image.png"}
-              alt={profile.name}
-              width={400}
-              height={400}
-              className="rounded-lg object-cover h-full w-full"
-            />
+          <div className="w-1/2 h-full">
+            <div className="relative w-full h-full">
+              <Image
+                src={profile.images?.[0] || "/add-your-image.png"}
+                alt={profile.name}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg"
+              />
+            </div>
           </div>
           <div className="w-1/2 p-4 flex flex-col justify-start h-full overflow-y-auto">
             <h2 className="text-xl font-bold text-white mb-4">

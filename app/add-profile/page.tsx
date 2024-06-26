@@ -6,10 +6,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { uploadImage } from "../utils/uploadImage";
 import { addProfile } from "../utils/addProfile";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function AddProfile() {
   const randomColor = useColor();
-  const placeholderImage = "/add-your-image.png"; // Replace with the actual path to your placeholder image
+  const placeholderImage = "/add-your-image.png";
   const [images, setImages] = useState<File[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ export default function AddProfile() {
     if (files.length + images.length <= 6) {
       setImages((prevImages) => [...prevImages, ...files]);
     } else {
-      alert("You can only add up to 6 images.");
+      toast.error("You can only add up to 6 images.");
     }
   };
 
@@ -78,7 +79,7 @@ export default function AddProfile() {
     try {
       const imageUrls = await Promise.all(images.map(uploadImage));
       await addProfile({ ...formData, images: imageUrls });
-      alert("Profile saved successfully!");
+      toast.success("Profile saved successfully!");
       setFormData({
         name: "",
         age: "",
@@ -92,7 +93,7 @@ export default function AddProfile() {
       setImages([]);
     } catch (error) {
       console.error("Error saving profile:", error);
-      alert("Failed to save profile. Please try again.");
+      toast.error("Failed to save profile. Please try again.");
     }
   };
 
@@ -101,6 +102,7 @@ export default function AddProfile() {
       className="min-h-screen flex items-start justify-center p-4 pt-2 font-mono"
       style={{ backgroundColor: randomColor }}
     >
+      <Toaster position="top-right" />
       <div className="w-full max-w-4xl mx-auto bg-white/10 backdrop-blur-md rounded-lg shadow-lg p-8 flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8">
         <div className="w-full md:w-auto flex flex-col justify-center items-center space-y-4">
           <div

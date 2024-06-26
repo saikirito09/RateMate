@@ -13,8 +13,9 @@ export default function HomePage() {
   useEffect(() => {
     const getProfiles = async () => {
       const data = await fetchProfiles();
-      console.log("Profiles data:", data); // Debug log for fetched profiles
-      setProfiles(data);
+      const shuffledProfiles = data.sort(() => 0.5 - Math.random());
+      console.log("Profiles data:", shuffledProfiles);
+      setProfiles(shuffledProfiles);
     };
     getProfiles();
   }, []);
@@ -35,7 +36,6 @@ export default function HomePage() {
             : profile,
         ),
       );
-      // Move to the next profile
       setCurrentProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     } catch (error) {
       console.error("Error rating profile:", error);

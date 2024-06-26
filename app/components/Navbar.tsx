@@ -1,12 +1,15 @@
-// app/components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Plus, BarChart } from "lucide-react";
 import { useColor } from "../utils/ColorContext";
 
 export default function Navbar() {
   const randomColor: string = useColor();
+  const pathname = usePathname();
+
+  const isCurrentPage = (path: string) => pathname === path;
 
   return (
     <>
@@ -22,14 +25,18 @@ export default function Navbar() {
         <div className="flex space-x-4">
           <Link
             href="/add-profile"
-            className="text-gray-400 flex items-center space-x-2 hover:text-[#ededed] focus:text-[#ededed]"
+            className={`flex items-center space-x-2 ${
+              isCurrentPage("/add-profile") ? "text-[#ededed]" : "text-gray-400"
+            } hover:text-[#ededed] focus:text-[#ededed]`}
           >
             <Plus className="w-4 h-4" />
             <span className="text-sm font-mono">Add Profile</span>
           </Link>
           <Link
             href="/analysis"
-            className="text-gray-400 flex items-center space-x-2 hover:text-[#ededed] focus:text-[#ededed]"
+            className={`flex items-center space-x-2 ${
+              isCurrentPage("/analysis") ? "text-[#ededed]" : "text-gray-400"
+            } hover:text-[#ededed] focus:text-[#ededed]`}
           >
             <BarChart className="w-4 h-4" />
             <span className="text-sm font-mono">Analysis</span>
